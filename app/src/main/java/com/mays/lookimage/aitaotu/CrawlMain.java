@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class CrawlMain {
-
-    private static Pattern pattern = Pattern.compile("\\[(.*?)\\](.*?)");
 
     public Map<String, List<String>> getUrl() {
         try {
@@ -32,9 +29,6 @@ public class CrawlMain {
                 if (++i == 5)  //控制一下组数
                     break;
             }
-//            Gson gson = new Gson();
-//            String s = gson.toJson(hrefMap);
-//            System.out.println(s);
             return hrefMap;
         } catch (Exception e) {
             e.printStackTrace();
