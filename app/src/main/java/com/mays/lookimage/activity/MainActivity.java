@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private AVLoadingIndicatorView mAvi;
     private ListView mLv;
 
-    Map<String, List<String>> urlMap;
+    Map<String, List<String>> mUrlMap;
     List<String> titleList;
     private Context mContext;
 
@@ -53,9 +53,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 System.out.println("----getUrl()---Start");
-                urlMap = new CrawlMain().getUrl();
+                new CrawlMain(new OnGetUrlFinishListener() {
+                    @Override
+                    public void onGetUrlFinish(Map<String, List<String>> urlMap) {
+                        mUrlMap = urlMap;
+                        setView();
+                    }
+                }).getUrl();
                 System.out.println("----getUrl()---End");
-                setView();
             }
         }).start();
     }
@@ -64,9 +69,9 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                titleList = getTitleList(urlMap);
+                titleList = getTitleList(mUrlMap);
                 mAvi.hide();
-                mLv.setAdapter(new MyAdapter(mContext, titleList, urlMap));
+                mLv.setAdapter(new MyAdapter(mContext, titleList, mUrlMap));
             }
         });
     }
@@ -77,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
             titleList.add(s);
         }
         return titleList;
+    }
+
+    public interface OnGetUrlFinishListener{
+        void onGetUrlFinish(Map<String, List<String>> urlMap);
     }
 
 }
